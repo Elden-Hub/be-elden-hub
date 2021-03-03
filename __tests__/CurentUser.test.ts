@@ -16,11 +16,8 @@ const currentUserQuery = `
   {
     me {
       id
-      firstName
-      lastName
-      displayName
+      user
       email
-      artisan
     }
   }
 `;
@@ -38,11 +35,8 @@ describe("Current User 👓", () => {
       data: {
         me: {
           id: `${user.id}`,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          displayName: `${user.firstName} ${user.lastName}`,
+          username: user.username,
           email: user.email,
-          artisan: false,
         },
       },
     });

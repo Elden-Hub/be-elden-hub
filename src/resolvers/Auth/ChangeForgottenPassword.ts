@@ -1,12 +1,11 @@
-import { ExpressContext } from "apollo-server-express/dist/ApolloServer";
 import { setSession } from "./helpers/index";
-import { ChangePasswordInput } from "./../../inputs/ChangePasswordInput";
-import { redis } from "./../../redis";
-import { forgotPasswordPrefix } from "./../../nodemailer/prefixes";
-import { logger } from "./../../middleware/logger";
-import { Profile } from "../../entity/Profile";
+import { ExpressContext } from "apollo-server-express";
+import { Profile } from "entity/Profile";
+import { ChangePasswordInput } from "inputs/ChangePasswordInput";
+import { redis } from "redis";
+import { forgotPasswordPrefix } from "nodemailer/prefixes";
+import { logger } from "middleware/logger";
 import { Resolver, Mutation, Arg, Ctx, UseMiddleware } from "type-graphql";
-import bcrypt from "bcryptjs";
 
 @Resolver()
 export class ChangeForgottenPasswordResolver {
@@ -33,7 +32,6 @@ export class ChangeForgottenPasswordResolver {
       if (password !== confirmPassword) {
         throw new Error("Passwords do not match. 😤");
       }
-      profile.password = await bcrypt.hash(password, 12);
 
       redis.del(forgotPasswordPrefix + token);
 

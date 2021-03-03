@@ -1,4 +1,4 @@
-import { ExpressContext } from "apollo-server-express/dist/ApolloServer";
+import { ExpressContext } from "apollo-server-express";
 import { setSession } from "./helpers";
 import { createConfirmationUrl } from "./../../nodemailer/createConfirmationUrl";
 import { Profile } from "../../entity/Profile";
@@ -13,7 +13,6 @@ import {
   Ctx,
 } from "type-graphql";
 import { sendEmail } from "../../nodemailer/sendEmail";
-import bcrypt from "bcryptjs";
 
 @Resolver()
 export class RegisterResolver {
@@ -26,17 +25,15 @@ export class RegisterResolver {
   @Mutation(() => Profile)
   async register(
     @Arg("data")
-    { email, firstName, lastName, password, artisan }: RegisterInput,
+    { email, firstName, lastName, password, mailingList }: RegisterInput,
     @Ctx() ctx: ExpressContext
   ): Promise<Profile> {
-    const hashedPassword = await bcrypt.hash(password, 12);
-
     const profile = await Profile.create({
       firstName,
       lastName,
       email,
-      password: hashedPassword,
-      artisan,
+      password,
+      mailingList,
     }).save();
 
     setSession(ctx, profile);

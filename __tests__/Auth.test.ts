@@ -17,11 +17,8 @@ afterAll(async (done) => {
 const registerMutation = `
   mutation Register($data: RegisterInput!) {
     register(data: $data) {
-      firstName
-      lastName
-      displayName
+      username
       email
-      artisan
     }
   }
 `;
@@ -62,9 +59,7 @@ describe("User authentication flow 🌸", () => {
       expect(response).toMatchObject({
         data: {
           register: {
-            firstName: fakeUser.firstName,
-            lastName: fakeUser.lastName,
-            displayName: `${fakeUser.firstName} ${fakeUser.lastName}`,
+            username: fakeUser.username,
             email: fakeUser.email,
           },
         },

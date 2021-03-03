@@ -1,5 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
-import { ObjectType, Field, ID, Root } from "type-graphql";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  BeforeInsert,
+} from "typeorm";
+import { ObjectType, Field, ID } from "type-graphql";
+import { v4 } from "uuid";
+import bcrypt from "bcryptjs";
 
 @ObjectType()
 @Entity()
@@ -14,24 +22,31 @@ export class Profile extends BaseEntity {
 
   @Field()
   @Column("text")
-  firstName: string;
+  username: string;
 
   @Field()
   @Column("text")
-  lastName: string;
-
-  @Field(() => String)
-  displayName(@Root() parent: Profile): string {
-    return `${parent.firstName} ${parent.lastName}`;
-  }
+  avatar: string;
 
   @Column()
   password: string;
 
   @Field()
   @Column("bool", { default: false })
-  artisan: boolean;
+  mailingList: boolean;
 
   @Column("bool", { default: false })
   confirmed: boolean;
+
+  @BeforeInsert()
+  addId(): void {
+    this.id = v4();
+  }
+
+  @BeforeInsert()
+  async hashPassword(): Promise<void> {
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, 12);
+    }
+  }
 }

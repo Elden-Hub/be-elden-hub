@@ -1,6 +1,7 @@
-import { ExpressContext } from "apollo-server-express/dist/ApolloServer";
+// import { AuthResponse } from "./../../types/index";
 import { setSession } from "./helpers/index";
 import { logger } from "../../middleware";
+import { ExpressContext } from "apollo-server-express";
 import { Profile } from "../../entity/Profile";
 import { LoginInput } from "../../inputs/LoginInput";
 import { Resolver, Mutation, Arg, Ctx, UseMiddleware } from "type-graphql";
